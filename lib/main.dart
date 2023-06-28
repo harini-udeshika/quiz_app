@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_app/question.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,18 +29,24 @@ class _QuizPageState extends State<QuizPage> {
   int i = 0;
   int flag = 0;
   List<Icon> scoreKeepers = [];
-  List<String> questions = [
-    'You can lead a cow down stairs but not up stairs.',
-    'Approximately one quarter of human bones are in the feet.',
-    'A slug\'s blood is green.'
-  ];
-  List<String> answers = ['False', 'True', 'True'];
+  // List<String> questions = [
+  //   'You can lead a cow down stairs but not up stairs.',
+  //   'Approximately one quarter of human bones are in the feet.',
+  //   'A slug\'s blood is green.'
+  // ];
+  // List<String> answers = ['False', 'True', 'True'];
   void correct() {
     scoreKeepers.add(const Icon(
       Icons.check,
       color: Colors.green,
     ));
   }
+
+  List<Question> questionList = [
+    Question('You can lead a cow down stairs but not up stairs.', false),
+    Question('Approximately one quarter of human bones are in the feet.', true),
+    Question('A slug\'s blood is green.', true),
+  ];
 
   void wrong() {
     scoreKeepers.add(const Icon(
@@ -59,7 +66,7 @@ class _QuizPageState extends State<QuizPage> {
           Expanded(
               flex: 4,
               child: Center(
-                  child: Text(questions[i],
+                  child: Text(questionList[i].question,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontSize: 26,
@@ -73,13 +80,13 @@ class _QuizPageState extends State<QuizPage> {
                 ),
                 onPressed: () {
                   setState(() {
-                    if (i <= questions.length - 1 && flag == 0) {
-                      if (answers[i] == 'True') {
+                    if (i <= questionList.length - 1 && flag == 0) {
+                      if (questionList[i].answer == true) {
                         correct();
-                      } else if (answers[i] == 'False') {
+                      } else if (questionList[i].answer == false) {
                         wrong();
                       }
-                      if (i != questions.length - 1) {
+                      if (i != questionList.length - 1) {
                         i += 1;
                       } else {
                         flag++;
@@ -98,13 +105,13 @@ class _QuizPageState extends State<QuizPage> {
                 ),
                 onPressed: () {
                   setState(() {
-                    if (i <= questions.length - 1 && flag == 0) {
-                      if (answers[i] == 'True') {
+                    if (i <= questionList.length - 1 && flag == 0) {
+                      if (questionList[i].answer == true) {
                         wrong();
-                      } else if (answers[i] == 'False') {
+                      } else if (questionList[i].answer == false) {
                         correct();
                       }
-                      if (i != questions.length - 1) {
+                      if (i != questionList.length - 1) {
                         i += 1;
                       } else {
                         flag++;
