@@ -25,6 +25,7 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
+  List<Icon> scoreKeepers = [];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -48,7 +49,14 @@ class _QuizPageState extends State<QuizPage> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    scoreKeepers.add(Icon(
+                      Icons.check,
+                      color: Colors.green,
+                    ));
+                  });
+                },
                 child: Text('True')),
           )),
           Expanded(
@@ -58,9 +66,19 @@ class _QuizPageState extends State<QuizPage> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    scoreKeepers.add(Icon(
+                      Icons.close,
+                      color: Colors.red,
+                    ));
+                  });
+                },
                 child: Text('False')),
-          ))
+          )),
+          Row(
+            children: scoreKeepers,
+          )
         ],
       ),
     );
