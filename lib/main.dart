@@ -26,6 +26,12 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   List<Icon> scoreKeepers = [];
+  List<String> questions = [
+    'You can lead a cow down stairs but not up stairs.',
+    'Approximately one quarter of human bones are in the feet.',
+    'A slug\'s blood is green.'
+  ];
+  int i = 0;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -37,7 +43,7 @@ class _QuizPageState extends State<QuizPage> {
           Expanded(
               flex: 4,
               child: Center(
-                  child: Text("This is where the question text will go",
+                  child: Text(questions[i],
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 26,
@@ -51,6 +57,9 @@ class _QuizPageState extends State<QuizPage> {
                 ),
                 onPressed: () {
                   setState(() {
+                   if (i < questions.length - 1) {
+                      i += 1;
+                    }
                     scoreKeepers.add(Icon(
                       Icons.check,
                       color: Colors.green,
@@ -68,6 +77,10 @@ class _QuizPageState extends State<QuizPage> {
                 ),
                 onPressed: () {
                   setState(() {
+                    if (i < questions.length - 1) {
+                      i += 1;
+                    }
+
                     scoreKeepers.add(Icon(
                       Icons.close,
                       color: Colors.red,
