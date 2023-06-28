@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Quiz Page',
       home: Scaffold(
           backgroundColor: Colors.grey, body: SafeArea(child: QuizPage())),
@@ -25,13 +25,29 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
+  int i = 0;
+  int flag = 0;
   List<Icon> scoreKeepers = [];
   List<String> questions = [
     'You can lead a cow down stairs but not up stairs.',
     'Approximately one quarter of human bones are in the feet.',
     'A slug\'s blood is green.'
   ];
-  int i = 0;
+  List<String> answers = ['False', 'True', 'True'];
+  void correct() {
+    scoreKeepers.add(const Icon(
+      Icons.check,
+      color: Colors.green,
+    ));
+  }
+
+  void wrong() {
+    scoreKeepers.add(const Icon(
+      Icons.close,
+      color: Colors.red,
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -45,7 +61,7 @@ class _QuizPageState extends State<QuizPage> {
               child: Center(
                   child: Text(questions[i],
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 26,
                       )))),
           Expanded(
@@ -57,13 +73,18 @@ class _QuizPageState extends State<QuizPage> {
                 ),
                 onPressed: () {
                   setState(() {
-                   if (i < questions.length - 1) {
-                      i += 1;
+                    if (i <= questions.length - 1 && flag == 0) {
+                      if (answers[i] == 'True') {
+                        correct();
+                      } else if (answers[i] == 'False') {
+                        wrong();
+                      }
+                      if (i != questions.length - 1) {
+                        i += 1;
+                      } else {
+                        flag++;
+                      }
                     }
-                    scoreKeepers.add(Icon(
-                      Icons.check,
-                      color: Colors.green,
-                    ));
                   });
                 },
                 child: Text('True')),
@@ -77,14 +98,18 @@ class _QuizPageState extends State<QuizPage> {
                 ),
                 onPressed: () {
                   setState(() {
-                    if (i < questions.length - 1) {
-                      i += 1;
+                    if (i <= questions.length - 1 && flag == 0) {
+                      if (answers[i] == 'True') {
+                        wrong();
+                      } else if (answers[i] == 'False') {
+                        correct();
+                      }
+                      if (i != questions.length - 1) {
+                        i += 1;
+                      } else {
+                        flag++;
+                      }
                     }
-
-                    scoreKeepers.add(Icon(
-                      Icons.close,
-                      color: Colors.red,
-                    ));
                   });
                 },
                 child: Text('False')),
