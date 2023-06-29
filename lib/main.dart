@@ -15,7 +15,11 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       title: 'Quiz Page',
       home: Scaffold(
-          backgroundColor: Colors.grey, body: SafeArea(child: QuizPage())),
+          backgroundColor: Color.fromARGB(255, 44, 43, 43),
+          body: Padding(
+            padding: EdgeInsets.all(8.0),
+            child: SafeArea(child: QuizPage()),
+          )),
     );
   }
 }
@@ -66,6 +70,7 @@ class _QuizPageState extends State<QuizPage> {
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontSize: 26,
+                            color: Colors.white,
                           )))),
           Expanded(
               child: Padding(
