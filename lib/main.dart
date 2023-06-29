@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_app/quizBrain.dart';
+import 'package:quiz_app/scoreKeeper.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,24 +28,26 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  int i = 0;
-  int flag = 0;
-  List<Icon> scoreKeepers = [];
- 
-  void correct() {
-    scoreKeepers.add(const Icon(
-      Icons.check,
-      color: Colors.green,
-    ));
-  }
-
   QuizBrain quizbrain = QuizBrain();
 
-  void wrong() {
-    scoreKeepers.add(const Icon(
-      Icons.close,
-      color: Colors.red,
-    ));
+  ScoreKeeper scoreKeeper = ScoreKeeper();
+  void alert() {
+    Alert(
+      context: context,
+      type: AlertType.success,
+      title: "THE END",
+      desc: "You've reached the end of the game",
+      buttons: [
+        DialogButton(
+          child: Text(
+            "Play again",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () => Navigator.pop(context),
+          width: 120,
+        )
+      ],
+    ).show();
   }
 
   @override
@@ -57,11 +61,12 @@ class _QuizPageState extends State<QuizPage> {
           Expanded(
               flex: 4,
               child: Center(
-                  child: Text(quizbrain.questionList[i].question,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 26,
-                      )))),
+                  child:
+                      Text(quizbrain.getQuestion(quizbrain.getQuestionCount()),
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 26,
+                          )))),
           Expanded(
               child: Padding(
             padding: const EdgeInsets.all(15.0),
@@ -71,17 +76,16 @@ class _QuizPageState extends State<QuizPage> {
                 ),
                 onPressed: () {
                   setState(() {
-                    if (i <= quizbrain.questionList.length - 1 && flag == 0) {
-                      if (quizbrain.questionList[i].answer == true) {
-                        correct();
-                      } else if (quizbrain.questionList[i].answer == false) {
-                        wrong();
-                      }
-                      if (i != quizbrain.questionList.length - 1) {
-                        i += 1;
+                    if (!quizbrain.getFlag()) {
+                      if (quizbrain.checkQuestion()) {
+                        scoreKeeper.correct();
                       } else {
-                        flag++;
+                        scoreKeeper.wrong();
                       }
+                    } else {
+                      alert();
+                      quizbrain.reset();
+                      scoreKeeper.resetmarkers();
                     }
                   });
                 },
@@ -96,24 +100,23 @@ class _QuizPageState extends State<QuizPage> {
                 ),
                 onPressed: () {
                   setState(() {
-                    if (i <= quizbrain.questionList.length - 1 && flag == 0) {
-                      if (quizbrain.questionList[i].answer == true) {
-                        wrong();
-                      } else if (quizbrain.questionList[i].answer == false) {
-                        correct();
-                      }
-                      if (i != quizbrain.questionList.length - 1) {
-                        i += 1;
+                    if (!quizbrain.getFlag()) {
+                      if (quizbrain.checkQuestion()) {
+                        scoreKeeper.wrong();
                       } else {
-                        flag++;
+                        scoreKeeper.correct();
                       }
+                    } else {
+                      alert();
+                      quizbrain.reset();
+                      scoreKeeper.resetmarkers();
                     }
                   });
                 },
                 child: Text('False')),
           )),
           Row(
-            children: scoreKeepers,
+            children: scoreKeeper.scoreKeepers,
           )
         ],
       ),
